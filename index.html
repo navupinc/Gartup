@@ -32,7 +32,7 @@
 
         header {
             background: var(--gartup-yellow);
-            height: 60px;
+            height: 70px; /* Aumentado ligeramente para acomodar el banner más grande */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -53,11 +53,12 @@
             transition: 0.2s;
         }
 
-        .brand-logo img { height: 30px; width: auto; }
+        /* BANNER MÁS GRANDE */
+        .brand-logo img { height: 45px; width: auto; }
 
         .search-pod {
             position: absolute;
-            top: 75px;
+            top: 85px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
@@ -235,7 +236,6 @@
             zoomControl: false
         });
 
-        // REFINED GPS FUNCTION
         function findMe() {
             map.locate({ 
                 setView: true, 
@@ -313,5 +313,4 @@
         document.getElementById('ai-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') askAI(); });
     </script>
 </body>
-  </html>
-
+</html>
