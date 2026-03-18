@@ -29,10 +29,11 @@
             align-items: center;
         }
 
+        /* MOBILE FIRST VIEWPORT */
         .viewport {
             width: 100%;
             padding: 20px;
-            max-width: 680px; 
+            max-width: 680px; /* Limite para desktop */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -45,6 +46,7 @@
         }
         .brand-space img { height: 60px; width: auto; }
 
+        /* SEARCH BAR OPTIMIZED FOR THUMBS */
         .search-engine-wrap {
             width: 100%;
             display: flex;
@@ -62,7 +64,7 @@
         #user-input {
             flex: 1;
             padding: 12px 18px;
-            font-size: 16px; 
+            font-size: 16px; /* Evita zoom automático en iOS */
             border: none;
             outline: none;
             background: transparent;
@@ -82,28 +84,13 @@
             flex-shrink: 0;
         }
 
-        /* [MONETIZACIÓN] ESTILO PARA LOS BANNERS DE PUBLICIDAD */
-        .ad-slot {
-            width: 100%;
-            background: #fdfdfd;
-            border: 1px dashed #ddd;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100px;
-            color: #999;
-            font-size: 12px;
-            text-align: center;
-        }
-
         #response-frame {
             width: 100%;
             margin-top: 10px;
             display: none;
         }
 
+        /* AI CARD - MOBILE STYLE */
         .ai-overview {
             background: var(--card-bg);
             padding: 20px;
@@ -124,6 +111,7 @@
         .concept-title { font-family: 'Lexend'; font-size: 26px; margin-bottom: 10px; line-height: 1.2; }
         .ai-text { font-size: 15px; line-height: 1.6; color: #333; }
 
+        /* REAL WEB RESULTS */
         .results-header {
             font-size: 14px;
             font-weight: 700;
@@ -180,8 +168,6 @@
             <button class="go-button" onclick="executeGartup()">🔍</button>
         </div>
 
-        <div id="top-ad" class="ad-slot">Espacio para Publicidad de Gartup<br>(Aquí pondremos el banner de Google)</div>
-
         <div id="status" class="status-msg">Consulting...</div>
 
         <div id="response-frame">
@@ -193,8 +179,6 @@
             
             <h2 class="results-header">Verified Sources</h2>
             <div id="web-results-list"></div>
-
-            <div id="bottom-ad" class="ad-slot" style="margin-top:20px;">¿Buscas algo más? <br> <a href="#">Ver ofertas en Amazon</a></div>
         </div>
     </div>
 
@@ -222,6 +206,7 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
 
             try {
+                // Forzamos a la IA a buscar fuentes REALES y devolver JSON
                 const call = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: { "Authorization": `Bearer ${_retrieve()}`, "Content-Type": "application/json" },
@@ -243,7 +228,7 @@
                 label.innerText = query;
                 output.innerHTML = data.definition;
 
-                data.results.forEach((res, index) => {
+                data.results.forEach(res => {
                     resultsList.innerHTML += `
                         <div class="web-result">
                             <span class="result-url">${res.url}</span>
@@ -251,11 +236,6 @@
                             <div class="result-snippet">${res.snippet}</div>
                         </div>
                     `;
-
-                    // [MONETIZACIÓN] CADA 2 RESULTADOS PODEMOS INSERTAR UN ANUNCIO NATIVO
-                    if(index === 1) {
-                        resultsList.innerHTML += `<div class="ad-slot" style="min-height:50px;">Sugerencia patrocinada</div>`;
-                    }
                 });
 
             } catch (err) {
@@ -268,7 +248,7 @@
         document.getElementById('user-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 executeGartup();
-                document.activeElement.blur(); 
+                document.activeElement.blur(); // Cierra el teclado en móvil
             }
         });
     </script>
