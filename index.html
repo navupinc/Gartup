@@ -206,14 +206,16 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
 
             try {
-                // Forzamos a la IA a buscar fuentes REALES y devolver JSON
                 const call = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: { "Authorization": `Bearer ${_retrieve()}`, "Content-Type": "application/json" },
                     body: JSON.stringify({ 
                         model: "llama-3.3-70b-versatile", 
                         messages: [
-                            { role: "system", content: "You are a real-world web indexer. Define the query in 2 sentences. Then, provide 4 REAL websites (Wikipedia, Britannica, official gov sites, news, etc.) that actually exist and would have info on this. Return ONLY JSON: { 'definition': '...', 'results': [{ 'title': '...', 'url': '...', 'snippet': '...' }] }" },
+                            { 
+                                role: "system", 
+                                content: "You are a professional real-world web indexer for Gartup. Provide a 3-sentence summary of the query in English. Then, provide exactly 50 REAL, DYNAMIC, and UNIQUE website sources (Wikipedia, .gov, .edu, official news, authoritative sites) that actually exist and would have info on this. All titles and snippets must be in English. Return ONLY JSON: { 'definition': '...', 'results': [{ 'title': '...', 'url': '...', 'snippet': '...' }] }" 
+                            },
                             { role: "user", content: `Search: ${query}` }
                         ],
                         response_format: { type: "json_object" }
@@ -228,15 +230,19 @@
                 label.innerText = query;
                 output.innerHTML = data.definition;
 
+                // Dynamic fragment for bug-free rendering of 50 results
+                const fragment = document.createDocumentFragment();
                 data.results.forEach(res => {
-                    resultsList.innerHTML += `
-                        <div class="web-result">
-                            <span class="result-url">${res.url}</span>
-                            <a href="${res.url}" target="_blank" class="result-title">${res.title}</a>
-                            <div class="result-snippet">${res.snippet}</div>
-                        </div>
+                    const resDiv = document.createElement('div');
+                    resDiv.className = 'web-result';
+                    resDiv.innerHTML = `
+                        <span class="result-url">${res.url}</span>
+                        <a href="${res.url}" target="_blank" class="result-title">${res.title}</a>
+                        <div class="result-snippet">${res.snippet}</div>
                     `;
+                    fragment.appendChild(resDiv);
                 });
+                resultsList.appendChild(fragment);
 
             } catch (err) {
                 status.style.display = "none";
@@ -248,7 +254,7 @@
         document.getElementById('user-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 executeGartup();
-                document.activeElement.blur(); // Cierra el teclado en móvil
+                document.activeElement.blur(); 
             }
         });
     </script>
