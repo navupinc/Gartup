@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gartup</title>
+    <title>Gartup | World Index</title>
     <link rel="icon" type="image/png" href="GartupLogo.png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Lexend:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #FFE900;
-            --accent-dark: #e6d200;
             --bg: #ffffff;
             --text: #111111;
             --border: #f0f0f2;
-            --glass: rgba(255, 255, 255, 0.9);
-            --shadow: 0 20px 40px rgba(0,0,0,0.05);
             --card-bg: #ffffff;
             --link-blue: #1a0dab;
         }
@@ -23,19 +20,17 @@
             --bg: #0a0a0b;
             --text: #f5f5f7;
             --border: #1f1f22;
-            --glass: rgba(10, 10, 11, 0.9);
-            --shadow: 0 20px 40px rgba(0,0,0,0.4);
             --card-bg: #161618;
             --link-blue: #8ab4f8;
         }
 
-        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box; }
+        * { transition: all 0.2s ease-out; box-sizing: border-box; }
         
         body {
             margin: 0; background-color: var(--bg); color: var(--text);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
+            overflow-x: hidden; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         .decoration-line {
@@ -44,185 +39,113 @@
             z-index: 1001;
         }
 
-        .blob {
-            position: fixed; width: 500px; height: 500px; background: var(--accent);
-            filter: blur(150px); opacity: 0.1; z-index: -1; border-radius: 50%;
-        }
-
         nav {
-            width: 100%; padding: 15px 20px; display: flex; justify-content: space-between;
-            align-items: center; position: fixed; top: 0; z-index: 100;
-            backdrop-filter: blur(25px); background: var(--glass); border-bottom: 1px solid var(--border);
+            width: 100%; padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; z-index: 100; pointer-events: none;
+        }
+        nav * { pointer-events: auto; }
+
+        .nav-logo-small { height: 30px; cursor: pointer; display: none; }
+        .theme-btn { font-size: 20px; cursor: pointer; padding: 10px; opacity: 0.6; }
+
+        /* Centered Home UI */
+        .main-container {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; width: 100%; max-width: 800px; padding: 20px;
         }
 
-        .nav-logo { height: 35px; cursor: pointer; }
+        .main-logo { width: 450px; max-width: 90% !important; margin-bottom: 50px; cursor: pointer; }
 
-        .theme-btn { font-size: 20px; cursor: pointer; padding: 5px; }
-
-        .hero-section {
-            margin-top: 20vh; padding: 0 20px; display: flex; flex-direction: column; align-items: center;
-            text-align: center;
-        }
-
-        .search-container { width: 100%; max-width: 720px; }
         .search-bar {
             background: var(--card-bg); border: 2px solid var(--border);
-            padding: 8px 12px; border-radius: 50px; box-shadow: var(--shadow);
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+            padding: 12px 20px; border-radius: 50px; 
+            display: flex; align-items: center; gap: 15px; width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
         }
-        .search-bar:focus-within { border-color: var(--accent); }
+        .search-bar:focus-within { border-color: var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.1); }
         
         input#user-input { 
             flex: 1; border: none; outline: none; background: transparent; 
-            font-size: 16px; color: var(--text); padding: 10px;
+            font-size: 20px; color: var(--text); padding: 5px;
         }
 
         .btn-search { 
             background: var(--accent); color: #000; border: none; 
-            padding: 12px 25px; border-radius: 30px; font-weight: 700; cursor: pointer;
+            padding: 14px 35px; border-radius: 30px; font-weight: 800; cursor: pointer; font-size: 16px;
         }
 
-        .recommended-box { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-        .rec-tag {
-            font-size: 11px; font-weight: 700; color: var(--text); opacity: 0.7;
-            padding: 8px 14px; border-radius: 30px; background: var(--card-bg);
-            border: 1px solid var(--border); cursor: pointer;
-        }
-        .rec-tag:hover { background: var(--accent); color: #000; opacity: 1; }
-
-        .dashboard {
-            width: 95%; max-width: 1100px; margin: 20px auto 100px;
-            display: grid; grid-template-columns: 1fr; gap: 20px;
-        }
-        @media (min-width: 900px) { .dashboard { grid-template-columns: 2fr 1fr; gap: 40px; } }
-
-        .card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 24px; padding: 25px; box-shadow: var(--shadow);
-        }
-
-        .section-tag { font-size: 10px; font-weight: 800; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block; }
-
-        #response-frame { width: 95%; max-width: 800px; margin: 100px auto 40px; display: none; padding-bottom: 100px; }
+        /* Article View Styling */
+        #response-frame { width: 95%; max-width: 1000px; margin: 120px auto 80px; display: none; }
         
-        .overview-box { 
-            background: var(--card-bg); border: 2px solid var(--accent); 
-            padding: 30px; border-radius: 28px; margin-bottom: 40px;
+        .article-card { 
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 60px; border-radius: 40px; box-shadow: 0 25px 60px rgba(0,0,0,0.04);
         }
-        .concept-title { font-family: 'Lexend'; font-size: 32px; margin-bottom: 15px; color: var(--text); text-transform: capitalize; }
-        .summary-text { font-size: 16px; line-height: 1.7; color: var(--text); opacity: 0.9; }
 
-        .web-result { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .result-url { font-size: 12px; color: #006621; display: block; margin-bottom: 5px; opacity: 0.7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .result-title { font-size: 19px; font-weight: 700; color: var(--link-blue); text-decoration: none; display: block; margin-bottom: 8px; }
-        .result-snippet { font-size: 14px; line-height: 1.5; color: var(--text); opacity: 0.7; }
+        .article-title { font-family: 'Lexend'; font-size: 56px; margin-bottom: 30px; line-height: 1; color: var(--text); }
+        .article-body { font-size: 19px; line-height: 1.8; opacity: 0.95; color: var(--text); }
+        .article-body p { margin-bottom: 25px; }
+        .article-body a { color: var(--link-blue); text-decoration: none; font-weight: 600; border-bottom: 2px solid transparent; }
+        .article-body a:hover { border-bottom-color: var(--link-blue); }
 
-        .status-msg { display: none; text-align: center; padding: 100px 20px; font-weight: 600; font-size: 18px; position: fixed; inset: 0; background: var(--bg); z-index: 50; }
+        .nodes-label { font-size: 13px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 30px; display: block; text-align: center;}
 
-        body.searching .hero-section, body.searching .dashboard { display: none; }
+        .related-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; width: 100%; padding-bottom: 50px;
+        }
+        .node-item {
+            background: var(--card-bg); padding: 25px; border-radius: 24px;
+            border: 1px solid var(--border); cursor: pointer; text-align: center;
+        }
+        .node-item:hover { border-color: var(--accent); transform: translateY(-5px); background: var(--accent); color: #000; }
+
+        .loader { display: none; text-align: center; padding: 150px; font-weight: 800; font-size: 18px; letter-spacing: 2px; }
+
+        /* Conditional Layouts */
+        body.searching .main-container { display: none; }
         body.searching #response-frame { display: block; }
+        body.searching .nav-logo-small { display: block; }
+        
         body.home #response-frame { display: none; }
-        body.home .hero-section, body.home .dashboard { display: flex; }
+        body.home .main-container { display: flex; }
+        body.home .nav-logo-small { display: none; }
 
-        .back-btn { 
-            background: var(--border); border: none; padding: 10px 20px; 
-            border-radius: 12px; cursor: pointer; margin-bottom: 20px; font-weight: 600; color: var(--text);
-        }
     </style>
 </head>
 <body id="body" class="home">
 
     <div class="decoration-line"></div>
-    <div class="blob" style="top: -100px; left: -100px;"></div>
 
     <nav>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span class="theme-btn" onclick="toggleTheme()">🌓</span>
-            <img src="GartupBanner.png" alt="Gartup" class="nav-logo" onclick="goHome()">
-        </div>
-        <div style="font-weight: 800; font-size: 12px; letter-spacing: 1px; opacity: 0.5;">WORLD INDEX</div>
+        <img src="GartupBanner.png" alt="Gartup" class="nav-logo-small" onclick="goHome()">
+        <span class="theme-btn" onclick="toggleTheme()">🌓</span>
     </nav>
 
-    <div id="status" class="status-msg">
-        <div class="blob" style="position: relative; width: 80px; height: 80px; margin: 0 auto 20px;"></div>
-        Indexing World Knowledge...
-    </div>
-
-    <div class="hero-section">
-        <div class="search-container">
-            <h1 style="font-family: 'Lexend'; font-size: 48px; margin-bottom: 20px;">Search the World.</h1>
-            <div class="search-bar">
-                <input type="text" id="user-input" placeholder="What are you looking for?" autocomplete="off">
-                <button class="btn-search" onclick="handleSearchClick()">Search</button>
-            </div>
-            
-            <div class="recommended-box">
-                <div class="rec-tag" onclick="reSearch('Quantum Computing')">💻 Computing</div>
-                <div class="rec-tag" onclick="reSearch('Mars Colonization')">🚀 Space</div>
-                <div class="rec-tag" onclick="reSearch('Ancient Civilizations')">🏛️ History</div>
-                <div class="rec-tag" onclick="reSearch('Climate Change Solutions')">🌿 Environment</div>
-            </div>
+    <div class="main-container">
+        <img src="GartupBanner.png" alt="Gartup" class="main-logo" onclick="goHome()">
+        <div class="search-bar">
+            <input type="text" id="user-input" placeholder="Search the world index..." autocomplete="off">
+            <button class="btn-search" onclick="handleSearchClick()">Index</button>
         </div>
     </div>
 
-    <div class="dashboard">
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <span class="section-tag">Global Trends</span>
-                <button class="btn-search" onclick="loadNews()" style="padding:5px 10px; font-size:10px;">Refresh</button>
-            </div>
-            <div id="news-feed">Loading global data...</div>
-        </div>
-        
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="card" style="background: var(--accent); color: #000; border: none; text-align: center;">
-                <span id="clock" style="font-size: 28px; font-weight: 800; display:block;">00:00</span>
-                <p id="date" style="font-size: 12px; opacity: 0.8; margin-top: 5px; font-weight: 600;"></p>
-            </div>
-            <div class="card">
-                <span class="section-tag">Recent Searches</span>
-                <div id="history" style="display:flex; flex-direction:column; gap:8px;"></div>
-            </div>
-        </div>
-    </div>
+    <div id="status" class="loader">INDEXING ARCHIVES...</div>
 
     <div id="response-frame">
-        <button class="back-btn" onclick="goHome()">← Back</button>
-        <div class="overview-box">
-            <span class="section-tag" style="color: var(--text)">Verified Summary</span>
-            <h1 id="concept-label" class="concept-title"></h1>
-            <div id="summary-text" class="summary-text"></div>
+        <div class="article-card">
+            <h1 id="article-title" class="article-title"></h1>
+            <div id="article-content" class="article-body"></div>
         </div>
         
-        <h2 class="section-tag" style="font-size: 14px; margin-bottom: 25px;">Verified Sources (Top 50)</h2>
-        <div id="web-results-list"></div>
+        <span class="nodes-label">Related Knowledge Nodes</span>
+        <div id="related-grid" class="related-grid"></div>
     </div>
 
     <script>
-        function _retrieve() {
-            const _obs = "WlhFW05SN0hHa1lJSVRueXlpV0dkeWIzRlk1R0U1c3cwb1FGWklRTGhpWmN5NmFaVG4=";
-            const _pre = "Z3NrX1dQ";
-            const _combined = atob(_pre + _obs);
-            return _combined.replace("[", "X");
-        }
-
         function toggleTheme() {
             const b = document.body;
             b.getAttribute('data-theme') === 'dark' ? b.removeAttribute('data-theme') : b.setAttribute('data-theme', 'dark');
-        }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('date').innerText = now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
-        }
-        setInterval(updateClock, 1000); updateClock();
-
-        function loadHistory() {
-            const h = JSON.parse(localStorage.getItem('g_history') || '[]');
-            document.getElementById('history').innerHTML = h.length ? h.map(i => 
-                `<div style="font-size:12px; padding:10px; background:var(--border); border-radius:12px; cursor:pointer;" onclick="reSearch('${i}')">🕒 ${i}</div>`
-            ).join('') : '<span style="font-size:12px; opacity:0.5">No recent activity</span>';
         }
 
         function goHome() {
@@ -230,121 +153,103 @@
             document.body.className = "home";
             document.getElementById('status').style.display = "none";
             document.getElementById('user-input').value = "";
-        }
-
-        function reSearch(val) { 
-            document.getElementById('user-input').value = val; 
-            handleSearchClick(); 
+            document.title = "Gartup | World Index";
         }
 
         function handleSearchClick() {
-            const query = document.getElementById('user-input').value.trim();
-            if (!query) return;
-            const newUrl = window.location.pathname + '?q=' + encodeURIComponent(query);
-            window.history.pushState({ query }, '', newUrl);
-            executeGartup(query);
+            const q = document.getElementById('user-input').value.trim();
+            if (q) nativeSearch(q);
         }
 
-        async function executeGartup(query) {
+        async function nativeSearch(query) {
             const body = document.body;
-            const frame = document.getElementById('response-frame');
-            const output = document.getElementById('summary-text');
-            const label = document.getElementById('concept-label');
             const status = document.getElementById('status');
-            const resultsList = document.getElementById('web-results-list');
+            const frame = document.getElementById('response-frame');
+            const contentElem = document.getElementById('article-content');
+            const gridElem = document.getElementById('related-grid');
 
+            // Set URL and State
+            const cleanQuery = query.replace(/_/g, ' ');
+            const newUrl = window.location.origin + window.location.pathname + '?q=' + encodeURIComponent(cleanQuery);
+            window.history.pushState({ query: cleanQuery }, '', newUrl);
+            
             body.className = "searching";
             status.style.display = "block";
             frame.style.display = "none";
-            resultsList.innerHTML = ""; 
+            gridElem.innerHTML = "";
             window.scrollTo({top: 0, behavior: 'smooth'});
 
-            let h = JSON.parse(localStorage.getItem('g_history') || '[]');
-            if(!h.includes(query)) h.unshift(query);
-            localStorage.setItem('g_history', JSON.stringify(h.slice(0, 5)));
-            loadHistory();
-
             try {
-                const call = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: "POST",
-                    headers: { "Authorization": `Bearer ${_retrieve()}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        model: "llama-3.3-70b-versatile", 
-                        messages: [
-                            { 
-                                role: "system", 
-                                content: "You are the Gartup Knowledge Indexer. Provide a 3-sentence summary in English. Then, provide exactly 50 REAL-WORLD, FUNCTIONAL English URLs. Return ONLY JSON: { 'definition': '...', 'results': [{ 'title': '...', 'url': '...', 'snippet': '...' }] }" 
-                            },
-                            { role: "user", content: `Index: ${query}` }
-                        ],
-                        response_format: { type: "json_object" }
-                    })
+                // Get matching page
+                const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQuery)}&format=json&origin=*`);
+                const searchData = await searchRes.json();
+                
+                if (!searchData.query.search.length) throw new Error("No results");
+                
+                const bestTitle = searchData.query.search[0].title;
+                document.title = `${bestTitle} - Gartup Index`;
+
+                // Get content
+                const contentRes = await fetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(bestTitle)}&prop=text&format=json&origin=*&disableeditsection=1&mobileformat=1`);
+                const contentData = await contentRes.json();
+                
+                document.getElementById('article-title').innerText = bestTitle;
+                
+                let container = document.createElement('div');
+                container.innerHTML = contentData.parse.text["*"];
+                
+                // Cleanup
+                const toRemove = container.querySelectorAll('.infobox, .ambox, .navbox, .metadata, .mw-editsection, .reflist, .reference');
+                toRemove.forEach(el => el.remove());
+
+                // Localize links
+                container.querySelectorAll('a').forEach(a => {
+                    const href = a.getAttribute('href');
+                    if (href && href.startsWith('/wiki/')) {
+                        const target = href.replace('/wiki/', '').replace(/_/g, ' ');
+                        a.setAttribute('href', `javascript:nativeSearch('${target}')`);
+                    } else if (href && (href.startsWith('http') || href.startsWith('//'))) {
+                        a.setAttribute('target', '_blank');
+                    } else {
+                        a.removeAttribute('href'); // Remove internal anchors
+                    }
                 });
 
-                const json = await call.json();
-                const data = JSON.parse(json.choices[0].message.content);
+                contentElem.innerHTML = container.innerHTML;
+
+                // Related Nodes
+                searchData.query.search.slice(1, 10).forEach(item => {
+                    const node = document.createElement('div');
+                    node.className = 'node-item';
+                    node.onclick = () => nativeSearch(item.title);
+                    node.innerHTML = `<h3 style="font-size:16px; margin:0; font-weight:700;">${item.title}</h3>`;
+                    gridElem.appendChild(node);
+                });
 
                 status.style.display = "none";
                 frame.style.display = "block";
-                label.innerText = query;
-                output.innerHTML = data.definition;
-
-                data.results.forEach(res => {
-                    const item = document.createElement('div');
-                    item.className = 'web-result';
-                    item.innerHTML = `
-                        <span class="result-url">${res.url}</span>
-                        <a href="${res.url}" target="_blank" class="result-title">${res.title}</a>
-                        <div class="result-snippet">${res.snippet}</div>
-                    `;
-                    resultsList.appendChild(item);
-                });
 
             } catch (err) {
                 status.style.display = "none";
                 frame.style.display = "block";
-                output.innerHTML = "Indexer encountered an error while processing the request.";
+                document.getElementById('article-title').innerText = "Query Error";
+                contentElem.innerHTML = "This node could not be retrieved from the archives.";
             }
         }
 
-        window.onpopstate = function(event) {
-            const params = new URLSearchParams(window.location.search);
-            const query = params.get('q');
-            if (query) {
-                document.getElementById('user-input').value = query;
-                executeGartup(query);
-            } else {
-                goHome();
-            }
+        // Handle browser back/forward buttons and direct links
+        window.onpopstate = (e) => {
+            const q = new URLSearchParams(window.location.search).get('q');
+            q ? nativeSearch(q) : goHome();
         };
 
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const query = params.get('q');
-            if (query) {
-                document.getElementById('user-input').value = query;
-                executeGartup(query);
-            }
-            loadHistory();
-            loadNews();
+        window.onload = () => {
+            const q = new URLSearchParams(window.location.search).get('q');
+            if (q) nativeSearch(q);
         };
 
-        async function loadNews() {
-            const words = ['Global Events', 'Technology', 'Science', 'Culture'];
-            const w = words[Math.floor(Math.random() * words.length)];
-            try {
-                const r = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${w}&format=json&origin=*`);
-                const data = await r.json();
-                document.getElementById('news-feed').innerHTML = data.query.search.slice(0, 5).map(i => `
-                    <div style="padding:12px 0; border-bottom:1px solid var(--border); cursor:pointer; font-size:13px; font-weight:600;" onclick="reSearch('${i.title}')">${i.title} <span style="color:var(--accent-dark)">→</span></div>
-                `).join('');
-            } catch(e) {
-                document.getElementById('news-feed').innerText = "Unable to fetch global data.";
-            }
-        }
-
-        document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSearchClick();
+        document.getElementById('user-input').addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') handleSearchClick(); 
         });
     </script>
 </body>
