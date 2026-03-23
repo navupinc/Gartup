@@ -3,183 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gartup | Search</title>
-    
+    <title>Gartup</title>
     <link rel="icon" type="image/png" href="GartupLogo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Lexend:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gartup-yellow: #FFE900;
-            --gartup-black: #111111;
-            --bg-color: #ffffff;
+            --accent: #FFE900;
+            --accent-dark: #e6d200;
+            --bg: #ffffff;
+            --text: #111111;
+            --border: #f0f0f2;
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow: 0 20px 40px rgba(0,0,0,0.05);
+            --card-bg: #ffffff;
             --link-blue: #1a0dab;
-            --snippet-gray: #4d5156;
-            --card-bg: #f8f9fa;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        [data-theme="dark"] {
+            --bg: #0a0a0b;
+            --text: #f5f5f7;
+            --border: #1f1f22;
+            --glass: rgba(10, 10, 11, 0.9);
+            --shadow: 0 20px 40px rgba(0,0,0,0.4);
+            --card-bg: #161618;
+            --link-blue: #8ab4f8;
+        }
+
+        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box; }
         
-        body { 
-            background: var(--bg-color); 
-            color: var(--gartup-black); 
+        body {
+            margin: 0; background-color: var(--bg); color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        .viewport {
-            width: 100%;
-            padding: 20px;
-            max-width: 680px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .decoration-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent), #ff9100, var(--accent));
+            z-index: 1001;
         }
 
-        .brand-space { 
-            margin-top: 5vh;
-            margin-bottom: 30px; 
-            text-align: center; 
-        }
-        .brand-space img { height: 60px; width: auto; }
-
-        .search-engine-wrap {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            background: #ffffff;
-            border-radius: 100px;
-            padding: 6px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-            position: sticky;
-            top: 15px;
-            z-index: 100;
+        .blob {
+            position: fixed; width: 500px; height: 500px; background: var(--accent);
+            filter: blur(150px); opacity: 0.1; z-index: -1; border-radius: 50%;
         }
 
-        #user-input {
-            flex: 1;
-            padding: 12px 18px;
-            font-size: 16px; 
-            border: none;
-            outline: none;
-            background: transparent;
+        nav {
+            width: 100%; padding: 15px 20px; display: flex; justify-content: space-between;
+            align-items: center; position: fixed; top: 0; z-index: 100;
+            backdrop-filter: blur(25px); background: var(--glass); border-bottom: 1px solid var(--border);
         }
 
-        .go-button {
-            background: var(--gartup-yellow);
-            border: none;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            flex-shrink: 0;
+        .theme-btn { font-size: 20px; cursor: pointer; padding: 5px; }
+
+        .hero-section {
+            margin-top: 15vh; padding: 0 20px; display: flex; flex-direction: column; align-items: center;
+            text-align: center;
         }
 
-        #response-frame {
-            width: 100%;
-            margin-top: 10px;
-            display: none;
+        .main-logo { height: 70px; width: auto; margin-bottom: 30px; cursor: pointer; }
+
+        .search-container { width: 100%; max-width: 720px; }
+        .search-bar {
+            background: var(--card-bg); border: 2px solid var(--border);
+            padding: 8px 12px; border-radius: 50px; box-shadow: var(--shadow);
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+        }
+        .search-bar:focus-within { border-color: var(--accent); }
+        
+        input#user-input { 
+            flex: 1; border: none; outline: none; background: transparent; 
+            font-size: 16px; color: var(--text); padding: 10px;
         }
 
-        .ai-overview {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 24px;
-            margin-bottom: 30px;
+        .btn-search { 
+            background: var(--accent); color: #000; border: none; 
+            padding: 12px 25px; border-radius: 30px; font-weight: 700; cursor: pointer;
         }
 
-        .ai-badge {
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: #999;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            display: block;
+        .recommended-box { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .rec-tag {
+            font-size: 11px; font-weight: 700; color: var(--text); opacity: 0.7;
+            padding: 8px 14px; border-radius: 30px; background: var(--card-bg);
+            border: 1px solid var(--border); cursor: pointer;
+        }
+        .rec-tag:hover { background: var(--accent); color: #000; opacity: 1; }
+
+        .dashboard {
+            width: 95%; max-width: 1100px; margin: 20px auto 100px;
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+        }
+        @media (min-width: 900px) { .dashboard { grid-template-columns: 2fr 1fr; gap: 40px; } }
+
+        .card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 24px; padding: 25px; box-shadow: var(--shadow);
         }
 
-        .concept-title { font-family: 'Lexend'; font-size: 26px; margin-bottom: 10px; line-height: 1.2; }
-        .ai-text { font-size: 15px; line-height: 1.6; color: #333; }
+        .section-tag { font-size: 10px; font-weight: 800; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block; }
 
-        .results-header {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #777;
-            text-transform: uppercase;
-            padding-left: 5px;
+        #response-frame { width: 95%; max-width: 800px; margin: 80px auto; display: none; padding-bottom: 100px; }
+        
+        .ai-overview { 
+            background: var(--card-bg); border: 2px solid var(--accent); 
+            padding: 30px; border-radius: 28px; margin-bottom: 40px;
         }
+        .concept-title { font-family: 'Lexend'; font-size: 32px; margin-bottom: 15px; color: var(--text); }
+        .ai-text { font-size: 16px; line-height: 1.7; color: var(--text); opacity: 0.9; }
 
-        .web-result {
-            margin-bottom: 25px;
-            padding: 10px 5px;
-            border-bottom: 1px solid #f0f0f0;
+        .web-result { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .result-url { font-size: 12px; color: #006621; display: block; margin-bottom: 5px; opacity: 0.7; }
+        .result-title { font-size: 19px; font-weight: 700; color: var(--link-blue); text-decoration: none; display: block; margin-bottom: 8px; }
+        .result-snippet { font-size: 14px; line-height: 1.5; color: var(--text); opacity: 0.7; }
+
+        .status-msg { display: none; text-align: center; padding: 50px; font-weight: 600; font-size: 18px; }
+
+        /* SPA STATES */
+        body.searching .hero-section, body.searching .dashboard { display: none; }
+        body.searching #response-frame { display: block; }
+        body.home #response-frame { display: none; }
+        body.home .hero-section, body.home .dashboard { display: flex; }
+
+        .back-btn { 
+            background: var(--border); border: none; padding: 10px 20px; 
+            border-radius: 12px; cursor: pointer; margin-bottom: 20px; font-weight: 600;
         }
-
-        .result-url {
-            font-size: 12px;
-            color: #006621;
-            margin-bottom: 4px;
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .result-title {
-            font-size: 18px;
-            color: var(--link-blue);
-            text-decoration: none;
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            line-height: 1.3;
-        }
-
-        .result-snippet {
-            font-size: 14px;
-            line-height: 1.5;
-            color: var(--snippet-gray);
-        }
-
-        .status-msg { display: none; margin-top: 20px; color: #bbb; font-size: 14px; }
     </style>
 </head>
-<body>
+<body id="body" class="home">
 
-    <div class="viewport">
-        <div class="brand-space">
-            <img src="GartupBanner.png" alt="Gartup">
-        </div>
+    <div class="decoration-line"></div>
+    <div class="blob" style="top: -100px; left: -100px;"></div>
 
-        <div class="search-engine-wrap">
-            <input type="text" id="user-input" placeholder="Search concept..." inputmode="search" enterkeyhint="search">
-            <button class="go-button" onclick="initiateSearch()">🔍</button>
-        </div>
+    <nav>
+        <span class="theme-btn" onclick="toggleTheme()">🌓 Mode</span>
+        <img src="GartupBanner.png" alt="Gartup" style="height: 30px; cursor: pointer;" onclick="goHome()">
+        <div style="width: 50px;"></div>
+    </nav>
 
-        <div id="status" class="status-msg">Consulting...</div>
+    <div id="status" class="status-msg">
+        <div class="blob" style="position: relative; width: 100px; height: 100px; margin: 0 auto 20px;"></div>
+        Consulting AI Indexer...
+    </div>
 
-        <div id="response-frame">
-            <div class="ai-overview">
-                <span class="ai-badge">Gartup Summary</span>
-                <h1 id="concept-label" class="concept-title"></h1>
-                <div id="ai-text" class="ai-text"></div>
+    <div class="hero-section">
+        <img src="GartupBanner.png" alt="Gartup" class="main-logo" onclick="goHome()">
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="user-input" placeholder="What do you want to discover today?" autocomplete="off">
+                <button class="btn-search" onclick="handleSearchClick()">Search</button>
             </div>
             
-            <h2 class="results-header">Verified Sources</h2>
-            <div id="web-results-list"></div>
+            <div class="recommended-box">
+                <div class="rec-tag" onclick="reSearch('Artificial Intelligence')">🤖 AI</div>
+                <div class="rec-tag" onclick="reSearch('Space Exploration')">🚀 Space</div>
+                <div class="rec-tag" onclick="reSearch('World History')">🏛️ History</div>
+                <div class="rec-tag" onclick="reSearch('Renewable Energy')">🌿 Ecology</div>
+            </div>
         </div>
     </div>
 
+    <div class="dashboard">
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <span class="section-tag">Trending</span>
+                <button class="btn-search" onclick="loadNews()" style="padding:5px 10px; font-size:10px;">🔄</button>
+            </div>
+            <div id="news-feed">Loading suggestions...</div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="card" style="background: var(--accent); color: #000; border: none; text-align: center;">
+                <span id="clock" style="font-size: 28px; font-weight: 800; display:block;">00:00</span>
+                <p id="date" style="font-size: 12px; opacity: 0.8; margin-top: 5px; font-weight: 600;"></p>
+            </div>
+            <div class="card">
+                <span class="section-tag">Recent</span>
+                <div id="history" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="response-frame">
+        <button class="back-btn" onclick="goHome()">← Back to Search</button>
+        <div class="ai-overview">
+            <span class="section-tag" style="color: var(--text)">Gartup Summary</span>
+            <h1 id="concept-label" class="concept-title"></h1>
+            <div id="ai-text" class="ai-text"></div>
+        </div>
+        
+        <h2 class="section-tag" style="font-size: 14px; margin-bottom: 25px;">Verified Sources (50 Results)</h2>
+        <div id="web-results-list"></div>
+    </div>
+
     <script>
-        // --- LOGICA DE API ORIGINAL (MANTENIDA) ---
         function _retrieve() {
             const _obs = "WlhFW05SN0hHa1lJSVRueXlpV0dkeWIzRlk1R0U1c3cwb1FGWklRTGhpWmN5NmFaVG4=";
             const _pre = "Z3NrX1dQ";
@@ -187,55 +205,66 @@
             return _combined.replace("[", "X");
         }
 
-        // --- NUEVA LÓGICA SPA ---
+        function toggleTheme() {
+            const b = document.body;
+            b.getAttribute('data-theme') === 'dark' ? b.removeAttribute('data-theme') : b.setAttribute('data-theme', 'dark');
+        }
 
-        // 1. Detectar búsqueda al cargar la página
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const query = params.get('q');
-            if (query) {
-                document.getElementById('user-input').value = query;
-                executeGartup(query);
-            }
-        });
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('date').innerText = now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
+        }
+        setInterval(updateClock, 1000); updateClock();
 
-        // 2. Manejar el botón "Atrás" del navegador
-        window.addEventListener('popstate', (e) => {
-            const params = new URLSearchParams(window.location.search);
-            const query = params.get('q');
-            if (query) {
-                document.getElementById('user-input').value = query;
-                executeGartup(query, false); // false para no volver a empujar la URL
-            } else {
-                // Si volvemos al inicio, limpiamos todo
-                document.getElementById('user-input').value = "";
-                document.getElementById('response-frame').style.display = "none";
-            }
-        });
+        function loadHistory() {
+            const h = JSON.parse(localStorage.getItem('g_history') || '[]');
+            document.getElementById('history').innerHTML = h.length ? h.map(i => 
+                `<div style="font-size:12px; padding:10px; background:var(--border); border-radius:12px; cursor:pointer;" onclick="reSearch('${i}')">🕒 ${i}</div>`
+            ).join('') : '<span style="font-size:12px; opacity:0.5">No recent searches</span>';
+        }
 
-        // Función puente para actualizar la URL
-        function initiateSearch() {
+        function goHome() {
+            window.history.pushState({}, '', window.location.pathname);
+            document.body.className = "home";
+            document.getElementById('status').style.display = "none";
+        }
+
+        function reSearch(val) { 
+            document.getElementById('user-input').value = val; 
+            handleSearchClick(); 
+        }
+
+        function handleSearchClick() {
             const query = document.getElementById('user-input').value.trim();
             if (!query) return;
-
-            // Actualizar URL sin recargar
-            const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
+            
+            // Push to URL like Google
+            const newUrl = window.location.pathname + '?q=' + encodeURIComponent(query);
             window.history.pushState({ query }, '', newUrl);
             
             executeGartup(query);
         }
 
-        async function executeGartup(query, updateUrl = true) {
+        async function executeGartup(query) {
+            const body = document.body;
             const frame = document.getElementById('response-frame');
             const output = document.getElementById('ai-text');
             const label = document.getElementById('concept-label');
             const status = document.getElementById('status');
             const resultsList = document.getElementById('web-results-list');
 
+            body.className = "searching";
             status.style.display = "block";
             frame.style.display = "none";
             resultsList.innerHTML = ""; 
             window.scrollTo({top: 0, behavior: 'smooth'});
+
+            // Save to history
+            let h = JSON.parse(localStorage.getItem('g_history') || '[]');
+            if(!h.includes(query)) h.unshift(query);
+            localStorage.setItem('g_history', JSON.stringify(h.slice(0, 5)));
+            loadHistory();
 
             try {
                 const call = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -246,7 +275,7 @@
                         messages: [
                             { 
                                 role: "system", 
-                                content: "You are the Gartup Real-Web Indexer. Provide a 3-sentence summary in English. Then, provide exactly 50 REAL-WORLD, FUNCTIONAL English URLs. DO NOT GUESS URLs. Use official root domains (e.g., wikipedia.org, britannica.com, nytimes.com, bbc.com, reuters.com, gov.uk, nasa.gov). If you are not 100% sure of a specific sub-page URL, provide the verified main search result page for that site regarding the topic. Return ONLY JSON: { 'definition': '...', 'results': [{ 'title': '...', 'url': '...', 'snippet': '...' }] }" 
+                                content: "You are the Gartup Real-Web Indexer. Provide a 3-sentence summary in English. Then, provide exactly 50 REAL-WORLD, FUNCTIONAL English URLs. Return ONLY JSON: { 'definition': '...', 'results': [{ 'title': '...', 'url': '...', 'snippet': '...' }] }" 
                             },
                             { role: "user", content: `Search: ${query}` }
                         ],
@@ -262,7 +291,6 @@
                 label.innerText = query;
                 output.innerHTML = data.definition;
 
-                const fragment = document.createDocumentFragment();
                 data.results.forEach(res => {
                     const item = document.createElement('div');
                     item.className = 'web-result';
@@ -271,23 +299,59 @@
                         <a href="${res.url}" target="_blank" class="result-title">${res.title}</a>
                         <div class="result-snippet">${res.snippet}</div>
                     `;
-                    fragment.appendChild(item);
+                    resultsList.appendChild(item);
                 });
-                resultsList.appendChild(fragment);
 
             } catch (err) {
                 status.style.display = "none";
                 frame.style.display = "block";
-                output.innerHTML = "Indexing timeout. Please try again.";
+                output.innerHTML = "Error connecting to indexer. Please try again.";
+            }
+        }
+
+        // Handle browser back/forward buttons
+        window.onpopstate = function(event) {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q');
+            if (query) {
+                document.getElementById('user-input').value = query;
+                executeGartup(query);
+            } else {
+                document.body.className = "home";
+                document.getElementById('status').style.display = "none";
+            }
+        };
+
+        // Check for query on load
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q');
+            if (query) {
+                document.getElementById('user-input').value = query;
+                executeGartup(query);
+            }
+            loadHistory();
+            loadNews();
+        };
+
+        async function loadNews() {
+            const words = ['Science', 'Technology', 'History', 'Art', 'Nature'];
+            const w = words[Math.floor(Math.random() * words.length)];
+            try {
+                const r = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${w}&format=json&origin=*`);
+                const data = await r.json();
+                document.getElementById('news-feed').innerHTML = data.query.search.slice(0, 5).map(i => `
+                    <div style="padding:12px 0; border-bottom:1px solid var(--border); cursor:pointer; font-size:13px; font-weight:600;" onclick="reSearch('${i.title}')">${i.title} <span style="color:var(--accent-dark)">→</span></div>
+                `).join('');
+            } catch(e) {
+                document.getElementById('news-feed').innerText = "Could not load trends.";
             }
         }
 
         document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                initiateSearch();
-                document.activeElement.blur(); 
-            }
+            if (e.key === 'Enter') handleSearchClick();
         });
+
     </script>
 </body>
 </html>
