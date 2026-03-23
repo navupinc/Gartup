@@ -48,61 +48,62 @@
         .nav-logo-small { height: 30px; cursor: pointer; display: none; }
         .theme-btn { font-size: 20px; cursor: pointer; padding: 10px; opacity: 0.6; }
 
-        /* Centered Home UI */
+        /* Adjusted Home UI */
         .main-container {
             flex: 1; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; width: 100%; max-width: 800px; padding: 20px;
+            justify-content: center; width: 100%; max-width: 750px; padding: 20px;
         }
 
-        .main-logo { width: 450px; max-width: 90% !important; margin-bottom: 50px; cursor: pointer; }
+        /* Logo size: Large but not excessive */
+        .main-logo { width: 340px; max-width: 85%; margin-bottom: 45px; cursor: pointer; }
 
         .search-bar {
             background: var(--card-bg); border: 2px solid var(--border);
-            padding: 12px 20px; border-radius: 50px; 
-            display: flex; align-items: center; gap: 15px; width: 100%;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+            padding: 10px 18px; border-radius: 50px; 
+            display: flex; align-items: center; gap: 12px; width: 100%;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.06);
         }
-        .search-bar:focus-within { border-color: var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.1); }
+        .search-bar:focus-within { border-color: var(--accent); box-shadow: 0 12px 45px rgba(0,0,0,0.1); }
         
         input#user-input { 
             flex: 1; border: none; outline: none; background: transparent; 
-            font-size: 20px; color: var(--text); padding: 5px;
+            font-size: 18px; color: var(--text); padding: 5px;
         }
 
         .btn-search { 
             background: var(--accent); color: #000; border: none; 
-            padding: 14px 35px; border-radius: 30px; font-weight: 800; cursor: pointer; font-size: 16px;
+            padding: 12px 32px; border-radius: 30px; font-weight: 800; cursor: pointer; font-size: 15px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* Article View Styling */
+        /* Article View */
         #response-frame { width: 95%; max-width: 1000px; margin: 120px auto 80px; display: none; }
         
         .article-card { 
             background: var(--card-bg); border: 1px solid var(--border);
-            padding: 60px; border-radius: 40px; box-shadow: 0 25px 60px rgba(0,0,0,0.04);
+            padding: 55px; border-radius: 38px; box-shadow: 0 20px 55px rgba(0,0,0,0.04);
         }
 
-        .article-title { font-family: 'Lexend'; font-size: 56px; margin-bottom: 30px; line-height: 1; color: var(--text); }
-        .article-body { font-size: 19px; line-height: 1.8; opacity: 0.95; color: var(--text); }
-        .article-body p { margin-bottom: 25px; }
-        .article-body a { color: var(--link-blue); text-decoration: none; font-weight: 600; border-bottom: 2px solid transparent; }
+        .article-title { font-family: 'Lexend'; font-size: 52px; margin-bottom: 25px; line-height: 1.1; color: var(--text); }
+        .article-body { font-size: 18px; line-height: 1.85; opacity: 0.95; color: var(--text); }
+        .article-body p { margin-bottom: 22px; }
+        .article-body a { color: var(--link-blue); text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; }
         .article-body a:hover { border-bottom-color: var(--link-blue); }
 
-        .nodes-label { font-size: 13px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 30px; display: block; text-align: center;}
+        .nodes-label { font-size: 12px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 3px; margin: 55px 0 25px; display: block; text-align: center;}
 
         .related-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 20px; width: 100%; padding-bottom: 50px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+            gap: 18px; width: 100%; padding-bottom: 60px;
         }
         .node-item {
-            background: var(--card-bg); padding: 25px; border-radius: 24px;
-            border: 1px solid var(--border); cursor: pointer; text-align: center;
+            background: var(--card-bg); padding: 22px; border-radius: 22px;
+            border: 1px solid var(--border); cursor: pointer; text-align: center; font-weight: 700;
         }
-        .node-item:hover { border-color: var(--accent); transform: translateY(-5px); background: var(--accent); color: #000; }
+        .node-item:hover { border-color: var(--accent); transform: translateY(-4px); background: var(--accent); color: #000; }
 
-        .loader { display: none; text-align: center; padding: 150px; font-weight: 800; font-size: 18px; letter-spacing: 2px; }
+        .loader { display: none; text-align: center; padding: 150px; font-weight: 800; font-size: 16px; letter-spacing: 2px; }
 
-        /* Conditional Layouts */
         body.searching .main-container { display: none; }
         body.searching #response-frame { display: block; }
         body.searching .nav-logo-small { display: block; }
@@ -125,12 +126,12 @@
     <div class="main-container">
         <img src="GartupBanner.png" alt="Gartup" class="main-logo" onclick="goHome()">
         <div class="search-bar">
-            <input type="text" id="user-input" placeholder="Search the world index..." autocomplete="off">
-            <button class="btn-search" onclick="handleSearchClick()">Index</button>
+            <input type="text" id="user-input" placeholder="What do you want to find?" autocomplete="off">
+            <button class="btn-search" onclick="handleSearchClick()">Search</button>
         </div>
     </div>
 
-    <div id="status" class="loader">INDEXING ARCHIVES...</div>
+    <div id="status" class="loader">SEARCHING ARCHIVES...</div>
 
     <div id="response-frame">
         <div class="article-card">
@@ -138,7 +139,7 @@
             <div id="article-content" class="article-body"></div>
         </div>
         
-        <span class="nodes-label">Related Knowledge Nodes</span>
+        <span class="nodes-label">Explore Related Topics</span>
         <div id="related-grid" class="related-grid"></div>
     </div>
 
@@ -149,7 +150,7 @@
         }
 
         function goHome() {
-            window.history.pushState({}, '', window.location.pathname);
+            window.history.pushState({}, '', window.location.origin + window.location.pathname);
             document.body.className = "home";
             document.getElementById('status').style.display = "none";
             document.getElementById('user-input').value = "";
@@ -168,7 +169,6 @@
             const contentElem = document.getElementById('article-content');
             const gridElem = document.getElementById('related-grid');
 
-            // Set URL and State
             const cleanQuery = query.replace(/_/g, ' ');
             const newUrl = window.location.origin + window.location.pathname + '?q=' + encodeURIComponent(cleanQuery);
             window.history.pushState({ query: cleanQuery }, '', newUrl);
@@ -180,16 +180,14 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
 
             try {
-                // Get matching page
                 const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQuery)}&format=json&origin=*`);
                 const searchData = await searchRes.json();
                 
                 if (!searchData.query.search.length) throw new Error("No results");
                 
                 const bestTitle = searchData.query.search[0].title;
-                document.title = `${bestTitle} - Gartup Index`;
+                document.title = `${bestTitle} - Gartup`;
 
-                // Get content
                 const contentRes = await fetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(bestTitle)}&prop=text&format=json&origin=*&disableeditsection=1&mobileformat=1`);
                 const contentData = await contentRes.json();
                 
@@ -198,11 +196,10 @@
                 let container = document.createElement('div');
                 container.innerHTML = contentData.parse.text["*"];
                 
-                // Cleanup
-                const toRemove = container.querySelectorAll('.infobox, .ambox, .navbox, .metadata, .mw-editsection, .reflist, .reference');
+                // Pure content cleanup
+                const toRemove = container.querySelectorAll('.infobox, .ambox, .navbox, .metadata, .mw-editsection, .reflist, .reference, .hatnote, .sidebar');
                 toRemove.forEach(el => el.remove());
 
-                // Localize links
                 container.querySelectorAll('a').forEach(a => {
                     const href = a.getAttribute('href');
                     if (href && href.startsWith('/wiki/')) {
@@ -211,18 +208,17 @@
                     } else if (href && (href.startsWith('http') || href.startsWith('//'))) {
                         a.setAttribute('target', '_blank');
                     } else {
-                        a.removeAttribute('href'); // Remove internal anchors
+                        a.removeAttribute('href');
                     }
                 });
 
                 contentElem.innerHTML = container.innerHTML;
 
-                // Related Nodes
                 searchData.query.search.slice(1, 10).forEach(item => {
                     const node = document.createElement('div');
                     node.className = 'node-item';
                     node.onclick = () => nativeSearch(item.title);
-                    node.innerHTML = `<h3 style="font-size:16px; margin:0; font-weight:700;">${item.title}</h3>`;
+                    node.innerHTML = `<span>${item.title}</span>`;
                     gridElem.appendChild(node);
                 });
 
@@ -232,12 +228,11 @@
             } catch (err) {
                 status.style.display = "none";
                 frame.style.display = "block";
-                document.getElementById('article-title').innerText = "Query Error";
-                contentElem.innerHTML = "This node could not be retrieved from the archives.";
+                document.getElementById('article-title').innerText = "Not Found";
+                contentElem.innerHTML = "We couldn't find an entry for this topic in the Gartup Index.";
             }
         }
 
-        // Handle browser back/forward buttons and direct links
         window.onpopstate = (e) => {
             const q = new URLSearchParams(window.location.search).get('q');
             q ? nativeSearch(q) : goHome();
