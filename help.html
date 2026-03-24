@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center | Gartup</title>
+    <link rel="icon" type="image/png" href="GartupLogo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Lexend:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Definición por defecto: Tema Claro (Fondo Blanco) */
+            --accent: #FFE900;
+            --bg: #ffffff;
+            --text: #111111;
+            --border: #f0f0f2;
+            --card-bg: #fafafa;
+            --muted: #666666;
+            --shadow: rgba(0,0,0,0.05);
+        }
+
+        /* Definición explícita para el Tema Oscuro */
+        [data-theme="dark"] {
+            --bg: #0a0a0b;
+            --text: #f5f5f7;
+            --border: #1f1f22;
+            --card-bg: #161618;
+            --muted: #a1a1a6;
+            --shadow: rgba(0,0,0,0.2);
+        }
+
+        * { transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s; box-sizing: border-box; }
+
+        body {
+            margin: 0; 
+            /* Esto asegura que el fondo sea blanco inicialmente */
+            background-color: var(--bg); 
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .decoration-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent), #ff9100, var(--accent));
+            z-index: 1100;
+        }
+
+        header {
+            padding: 60px 20px 40px; text-align: center;
+        }
+
+        .help-logo { width: 180px; margin-bottom: 25px; cursor: pointer; }
+
+        .container {
+            max-width: 800px; margin: 0 auto; padding: 20px;
+            flex: 1; /* Empuja el footer hacia abajo */
+        }
+
+        h1 { font-family: 'Lexend'; font-size: 3rem; margin: 0 0 10px; line-height: 1.1; }
+        p.subtitle { font-size: 1.2rem; color: var(--muted); margin: 0 0 50px; font-weight: 400; }
+
+        .faq-section { margin-bottom: 60px; }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .faq-item h3 {
+            margin: 0 0 12px; font-family: 'Lexend'; font-size: 1.3rem; color: var(--text); font-weight: 700;
+        }
+
+        .faq-item p { margin: 0; color: var(--muted); font-size: 1rem; font-weight: 400; }
+
+        .footer-action {
+            text-align: center; padding: 60px 20px;
+            border-top: 1px solid var(--border); margin-top: auto;
+            background-color: var(--card-bg);
+        }
+
+        .btn-wiki {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(255, 233, 0, 0.3);
+            transform: translateY(0);
+        }
+
+        .btn-wiki:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 233, 0, 0.4);
+        }
+
+        .theme-toggle {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 15px; border-radius: 50%; cursor: pointer; font-size: 22px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background-color: var(--border);
+        }
+
+        @media (max-width: 600px) {
+            header { padding-top: 50px; }
+            h1 { font-size: 2.2rem; }
+            .subtitle { font-size: 1.1rem; margin-bottom: 40px; }
+            .faq-item { padding: 25px; border-radius: 20px; }
+            .btn-wiki { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body id="body">
+
+    <div class="decoration-line"></div>
+
+    <header>
+        <a href="https://gartup.hs.vc"><img src="GartupBanner.png" alt="Gartup" class="help-logo"></a>
+        <h1>Help Center</h1>
+        <p class="subtitle">Everything you need to know about the World Index</p>
+    </header>
+
+    <main class="container">
+        <section class="faq-section">
+            <div class="faq-item">
+                <h3>What is Gartup?</h3>
+                <p>Gartup is a minimalist neural index designed to provide clean, high-speed access to world knowledge without the visual clutter of traditional encyclopedias.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I search?</h3>
+                <p>Simply type any topic in the main search bar on the home page. Gartup will index the most relevant node and display a distraction-free version of the information.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What are "Related Nodes"?</h3>
+                <p>Nodes are interconnected pieces of information. At the bottom of every article, you will find related concepts to continue your exploration of the index.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is there a Dark Mode?</h3>
+                <p>Yes. Although the site loads in light mode by default, you can toggle the dark theme using the button in the bottom right corner to protect your eyes during late-night sessions.</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="footer-action">
+        <p style="margin: 0 0 25px; font-weight: 700; font-size: 1.2rem; color: var(--text);">Ready to explore the index?</p>
+        <a href="https://gartup.hs.vc" class="btn-wiki">Go to Wiki</a>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓</div>
+
+    <script>
+        // Función para cambiar el tema manualmente
+        function toggleTheme() {
+            const b = document.body;
+            if (b.getAttribute('data-theme') === 'dark') {
+                b.removeAttribute('data-theme');
+                // Opcional: Guardar preferencia en localStorage
+                localStorage.setItem('gartup-theme', 'light');
+            } else {
+                b.setAttribute('data-theme', 'dark');
+                // Opcional: Guardar preferencia en localStorage
+                localStorage.setItem('gartup-theme', 'dark');
+            }
+        }
+
+        // --- EXPLICACIÓN: SE HA ELIMINADO LA AUTODETECCIÓN ---
+        // Al eliminar el bloque 'window.matchMedia...', la web
+        // cargará por defecto con los estilos definidos en :root,
+        // que corresponden al fondo blanco (Light Mode).
+
+        // Opcional: Cargar preferencia guardada (si quieres que recuerde la decisión del usuario)
+        /*
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('gartup-theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        }
+        */
+    </script>
+</body>
+</html>
