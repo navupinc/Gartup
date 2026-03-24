@@ -33,7 +33,7 @@
             overflow-x: hidden; min-height: 100vh;
         }
 
-        /* Animaciones */
+        /* Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -54,7 +54,7 @@
             background: var(--bg); border-bottom: 1px solid transparent;
         }
 
-        body.searching header { border-bottom-color: var(--border); backdrop-filter: blur(10px); background: var(--glass); }
+        body.searching header { border-bottom-color: var(--border); backdrop-filter: blur(10px); }
 
         .nav-left { display: flex; align-items: center; gap: 15px; }
         .nav-logo-small { height: 28px; cursor: pointer; display: none; }
@@ -106,8 +106,12 @@
 
         .article-title { font-family: 'Lexend'; font-size: 32px; margin-bottom: 20px; line-height: 1.2; }
         .article-body { font-size: 17px; line-height: 1.7; opacity: 0.9; }
+        
+        /* Overriding Wikipedia leftovers */
+        .article-body * { font-family: inherit !important; color: inherit !important; background: transparent !important; }
         .article-body p { margin-bottom: 20px; }
-        .article-body a { color: var(--link-blue); text-decoration: none; font-weight: 600; }
+        .article-body a { color: var(--link-blue) !important; text-decoration: none; font-weight: 600; }
+        .article-body img { border-radius: 12px; margin: 10px 0; max-width: 100%; height: auto; }
 
         .nodes-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 2px; margin: 40px 0 20px; display: block; text-align: center;}
 
@@ -123,7 +127,7 @@
         /* Mobile specific adjustments */
         @media (max-width: 768px) {
             body.searching .search-container { max-width: 180px; left: 60%; }
-            .btn-search { display: none; } /* Hide text on mobile search bar to save space */
+            .btn-search { display: none; } 
             .article-card { padding: 25px; border-radius: 20px; }
             .article-title { font-size: 28px; }
             .main-logo { width: 220px; }
@@ -149,12 +153,12 @@
         
         <div class="search-container">
             <div class="search-bar">
-                <input type="text" id="user-input" placeholder="Search..." autocomplete="off">
+                <input type="text" id="user-input" placeholder="Search the index..." autocomplete="off">
                 <button class="btn-search" onclick="handleSearchClick()">Search</button>
             </div>
         </div>
 
-        <span class="theme-btn" onclick="toggleTheme()" style="cursor:pointer; opacity:0.6;">🌓</span>
+        <span class="theme-btn" onclick="toggleTheme()" style="cursor:pointer; opacity:0.6; font-size: 20px;">🌓</span>
     </header>
 
     <main class="main-home fade-in">
@@ -226,9 +230,20 @@
                 let container = document.createElement('div');
                 container.innerHTML = contentData.parse.text["*"];
                 
-                // Limpieza agresiva para Gartup nativo
-                const cleanSelectors = '.infobox, .ambox, .navbox, .metadata, .mw-editsection, .reflist, .reference, .hatnote, .sidebar, .vertical-navbox';
-                container.querySelectorAll(cleanSelectors).forEach(el => el.remove());
+                // Aggressive cleaning of Wikipedia artifacts
+                const cleanSelectors = [
+                    '.infobox', '.ambox', '.navbox', '.metadata', '.mw-editsection', 
+                    '.reflist', '.reference', '.hatnote', '.sidebar', '.vertical-navbox',
+                    '.mbox-small', '.noprint', '.s_rt', '.plainlinks', '.extiw'
+                ];
+                cleanSelectors.forEach(sel => {
+                    container.querySelectorAll(sel).forEach(el => el.remove());
+                });
+
+                // Remove bracketed references [1], [2], etc.
+                let rawHTML = container.innerHTML;
+                rawHTML = rawHTML.replace(/\[\d+\]/g, ''); 
+                container.innerHTML = rawHTML;
 
                 container.querySelectorAll('a').forEach(a => {
                     const href = a.getAttribute('href');
@@ -242,9 +257,15 @@
                     }
                 });
 
+                // Force absolute paths for images
+                container.querySelectorAll('img').forEach(img => {
+                    let src = img.getAttribute('src');
+                    if (src && src.startsWith('//')) img.setAttribute('src', 'https:' + src);
+                });
+
                 contentElem.innerHTML = container.innerHTML;
 
-                // Cargar nodos relacionados
+                // Load Related Nodes
                 gridElem.innerHTML = "";
                 searchData.query.search.slice(1, 11).forEach(item => {
                     const node = document.createElement('div');
@@ -256,7 +277,7 @@
 
                 status.style.display = "none";
                 frame.style.display = "block";
-                // Trigger animation
+                
                 frame.classList.remove('fade-in');
                 void frame.offsetWidth; 
                 frame.classList.add('fade-in');
@@ -265,7 +286,7 @@
                 status.style.display = "none";
                 frame.style.display = "block";
                 document.getElementById('article-title').innerText = "Not Found";
-                contentElem.innerHTML = "This node is currently offline.";
+                contentElem.innerHTML = "This node is currently offline or does not exist in the index.";
             }
         }
 
