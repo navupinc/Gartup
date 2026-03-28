@@ -130,13 +130,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        // API Key dividida en partes para evadir escaneos directos
-        const _p1 = "gsk_";
-        const _p2 = "NLZJxTJAER4fg";
-        const _p3 = "I9Woo3tWGdyb";
-        const _p4 = "3FY20fNvqtAly";
-        const _p5 = "ZjzObwJeyzg1Yf";
-        const G_KEY = _p1 + _p2 + _p3 + _p4 + _p5;
+        // LA API KEY YA NO ESTÁ AQUÍ. SE MANEJA EN EL SERVIDOR (/api/chat).
 
         const chatBox = document.getElementById('chat-container');
         const input = document.getElementById('user-input');
@@ -188,18 +182,16 @@
             garyMsgUI.classList.add('typing');
 
             try {
-                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                // Llamamos a nuestra función de servidor de Vercel (Seguro)
+                const response = await fetch("/api/chat", {
                     method: "POST",
-                    headers: { "Authorization": `Bearer ${G_KEY}`, "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        model: "llama-3.3-70b-versatile",
-                        messages: messagesHistory,
-                        temperature: 0.6,
-                        max_tokens: 1024
+                        messages: messagesHistory
                     })
                 });
 
-                if (!response.ok) throw new Error();
+                if (!response.ok) throw new Error("Error en la respuesta del servidor");
 
                 const data = await response.json();
                 const reply = data.choices[0].message.content;
@@ -212,8 +204,10 @@
 
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             } catch (err) {
-                garyMsgUI.innerText = "Systems overloaded. Try again in a second. ⚠️";
+                garyMsgUI.classList.remove('typing');
+                garyMsgUI.innerText = "Systems overloaded or configuration error. ⚠️";
                 garyMsgUI.style.color = "var(--error)";
+                console.error(err);
             }
         }
 
